@@ -1,8 +1,20 @@
-export const DEPARTMENTS = [
-  'Engineering',
-  'Sales',
-  'Human Resources',
-  'Finances'
+export const LOCATIONS = [
+  {
+    id: 6167865,
+    name: "Toronto",
+    country: "CA"
+  },
+  {
+    id: 6094817,
+    name: "Ottawa",
+    country: "CA"
+  },
+  {
+    id: 1850147,
+    name: "Tokyo",
+    country: "JP"
+  }
 ] as const;
 
-export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export type LOCATION_ID_TYPE = typeof LOCATIONS[number]['id'];
+

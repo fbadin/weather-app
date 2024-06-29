@@ -1,18 +1,17 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { AppContext } from '../contexts/appContext';
+import { AppContext } from '../../contexts/appContext';
 import { BrowserRouter } from 'react-router-dom';
 import { act } from 'react-dom/test-utils';
 import { Provider } from 'react-redux';
 
-import { Dashboard } from './Dashboard';
-import { URLS } from '../routes';
-import { EmployeesData } from '../api/employees';
-import * as ACTIONS from '../state/employees/actions';
-import { store } from '../state/store';
-import { ApiResponse } from '../lib/api';
-import { fetchEmployees } from '../api/employees';
+import { LandingPage } from './LandingPage';
+import { URLS } from '../../routes';
+import * as ACTIONS from '../../state/employees/actions';
+import { store } from '../../state/store';
+import { ApiResponse } from '../../lib/api';
+import { fetchWeather } from '../../api/weather';
 
-const employeesData: EmployeesData = {
+const employeesData: {} = {
   employees: [
     { id: '1', name: 'John Snow', position: 'Software Developer', department: 'Engineering' },
   ],
@@ -46,17 +45,17 @@ jest.useFakeTimers();
 const mockSetBackBtnUrl = jest.fn();
 
 const mockAppContextValue = {
-  backBtnUrl: '/dashboard',
+  backBtnUrl: URLS.LANDING_PAGE,
   setBackBtnUrl: mockSetBackBtnUrl,
 };
 
-const renderDashboard = async () => {
+const renderLandingPage = async () => {
   await act(async () => {
     render(
       <Provider store={store}>
         <AppContext.Provider value={mockAppContextValue}>
           <BrowserRouter>
-            <Dashboard />
+            <LandingPage />
           </BrowserRouter>
         </AppContext.Provider>
       </Provider>
@@ -64,44 +63,44 @@ const renderDashboard = async () => {
   });
 };
 
-describe('Dashboard', () => {
-  let fetchEmployeesMock: jest.Mock<Promise<ApiResponse<EmployeesData>>>;
+describe('LandingPage', () => {
+  let fetchWeather: jest.Mock<Promise<ApiResponse<{}>>>;
 
   beforeEach(() => {
     (ACTIONS.setUsers as jest.Mock).mockImplementation(()=>({ type: 'SET_USERS', payload: employeesData }))
 
-    const fetchEmployeesLib = fetchEmployees as unknown as jest.Mock;
-    fetchEmployeesMock = jest.fn().mockImplementation(()=>({ data: employeesData }));
-    fetchEmployeesLib.mockImplementation(fetchEmployeesMock);
+    const fetchEmployeesLib = fetchWeather as unknown as jest.Mock;
+    fetchWeather = jest.fn().mockImplementation(()=>({ data: employeesData }));
+    fetchEmployeesLib.mockImplementation(fetchWeather);
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('renders the Dashboard component', async () => {
-    await renderDashboard();
-    expect(screen.getByTestId('dashboard')).toBeInTheDocument();
+  it('renders the LandingPage component', async () => {
+    await renderLandingPage();
+    expect(screen.getByTestId('landing-page')).toBeInTheDocument();
     expect(ACTIONS.setUsers).toHaveBeenCalledWith(employeesData);
   });
 
   it('sets the back button URL on mount', async () => {
-    await renderDashboard();
+    await renderLandingPage();
     expect(mockSetBackBtnUrl).toHaveBeenCalledWith(URLS.LANDING_PAGE);
   });
 
   it('handles sorting button click', async () => {
-    await renderDashboard();
+    await renderLandingPage();
     const sortButton = screen.getByTestId('sort-button');
     fireEvent.click(sortButton);
     await act(async () => {
       jest.advanceTimersByTime(500);
     });
-    expect(fetchEmployeesMock).toHaveBeenCalledWith("", "All", "asc");
+    expect(fetchWeather).toHaveBeenCalledWith("", "All", "asc");
   });
 
   it('handles department filter selection', async () => {
-    await renderDashboard();
+    await renderLandingPage();
     const dropdownToggle = screen.getByRole('button', { name: /filter by department/i });
     fireEvent.click(dropdownToggle);
     const engineeringOption = screen.getByRole('button', { name: 'Engineering' });
@@ -109,12 +108,12 @@ describe('Dashboard', () => {
     await act(async () => {
       jest.advanceTimersByTime(500);
     });
-    expect(fetchEmployeesMock).toHaveBeenCalledWith("", "Engineering", "none");
+    expect(fetchWeather).toHaveBeenCalledWith("", "Engineering", "none");
   });
 
   it('displays zero state when no employees are found', async () => {
     (ACTIONS.setUsers as jest.Mock).mockImplementation(()=>({ type: 'SET_USERS', payload: { employees: []}}))
-    await renderDashboard();
+    await renderLandingPage();
 
     await act(async () => {
       jest.advanceTimersByTime(500);
@@ -123,12 +122,12 @@ describe('Dashboard', () => {
   });
 
   it('handles search input', async () => {
-    await renderDashboard();
+    await renderLandingPage();
     const searchInput = screen.getByPlaceholderText('Search by name or position');
     fireEvent.change(searchInput, { target: { value: 'John' } });
     await act(async () => {
       jest.advanceTimersByTime(1000);
     });
-    expect(fetchEmployeesMock).toHaveBeenCalledWith("John", "All", "none");
+    expect(fetchWeather).toHaveBeenCalledWith("John", "All", "none");
   });
 });

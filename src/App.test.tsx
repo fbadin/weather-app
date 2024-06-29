@@ -32,13 +32,13 @@ describe('App', () => {
     expect(CommonTemplate).toHaveClass('bg-dark-2 text-dark-gray min-h-full mt-16')
   })
 
-  it('renders the Dashboard as a main route', async ()=>{
+  it('renders the LandingPage as a main route', async ()=>{
     await act(async () => {
       render(<App />);
     });
 
-    const Dashboard = screen.getByTestId('dashboard');
-    expect(Dashboard).toBeInTheDocument();
+    const LandingPage = screen.getByTestId('landing-page');
+    expect(LandingPage).toBeInTheDocument();
   });
 })
 

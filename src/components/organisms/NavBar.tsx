@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { ArrowLeft, Cloud } from 'react-bootstrap-icons';
 
-import { AppContext } from '../contexts/appContext';
+import { AppContext } from '../../contexts/appContext';
 import logo from '../assets/logo192.png'
 import { useLocation } from 'react-router-dom';
-import { URLS } from '../routes';
+import { URLS } from '../../routes';
 import { Link } from 'react-router-dom';
 
 const NavBar = () => {
@@ -33,7 +33,7 @@ const NavBar = () => {
           <Link to={URLS.LANDING_PAGE}
             aria-label="Back to Home"
           >
-            <Cloud size={32} fontWeight={600} />
+            <Cloud size={48} fontWeight={600} className='text-blue-500' />
           </Link>
         </div>
       </nav>

@@ -52,9 +52,7 @@ class Api {
   private fetch = async (url: string, params?: Params): Promise<Response> => {
     const options = {
       ...params,
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      redirect: "follow"
     };
 
     if (params?.body) {
@@ -64,7 +62,7 @@ class Api {
     if (params?.timeout) {
       options['timeout'] = params.timeout;
     }
-
+    console.log('options', options)
     try {
       return await fetch(url, options as RequestInit);
     } catch (error) {

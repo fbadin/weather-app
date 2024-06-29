@@ -12,7 +12,7 @@ A project to show the weather, created using Create React App, Redux, Tailwind, 
 - Utilized `React Context` to manage the state of the app enabling future scalability.
 - Used `Redux` to manage the state of Weathers' data.
 - Implemented a `Custom Hook` useDebounce to prevent over-fetching data from the Weathers' index endpoint.
-- Added `React Router` to route URLs for the Dashboard and Weather Details/Management. Routes default to the Dashboard if not found.
+- Added `React Router` to route URLs for the LandingPage and Weather Details/Management. Routes default to the LandingPage if not found.
 - Created a composable layout  `CommonTemplate` to handle the layout of the app.
 - Implemented the app using only `Tailwind`.
 - Added a Navbar.
@@ -75,7 +75,7 @@ This sample project is only available for local testing.
 ---
 
 
-## The Dashboard
+## The LandingPage
 
 - Implemented a zero state if no Weather is found.
 - Added text filters to search by name and position. A "X" button appears to clear the search once the user starts typing.

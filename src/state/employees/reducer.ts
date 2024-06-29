@@ -1,14 +1,13 @@
 import { UnknownAction } from 'redux';
-import { EmployeesData } from '../../api/employees';
 import { ACTIONS, ACTION_TYPES } from './actions';
 
-export const initialState: EmployeesData = {
+export const initialState: {} = {
   employees: []
 };
 
 type REDUCER_ACTIONS = { type: ACTION_TYPES, payload: any };
 
-export function employeesReducer(state: EmployeesData = initialState, action: UnknownAction | REDUCER_ACTIONS): EmployeesData {
+export function employeesReducer(state: {} = initialState, action: UnknownAction | REDUCER_ACTIONS): {} {
   switch (action.type) {
     case ACTIONS.SET_USERS:
       return {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import { NavBar } from '../components/NavBar';
+import { NavBar } from '../organisms/NavBar';
 
 type Props = {
   children: React.ReactNode;
@@ -21,6 +21,10 @@ const CommonTemplate = ({ children }: Props) => {
           </Row>
         </Container>
       </main>
+      <footer className='bg-dark-gray p-6'>
+        <p className='font-bold'>Weather App</p>
+        <p>By Fernando Badin</p>
+      </footer>
     </>
   )
 }

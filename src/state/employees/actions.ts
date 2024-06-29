@@ -1,5 +1,4 @@
 import { UnknownAction } from "@reduxjs/toolkit";
-import { EmployeesData } from "../../api/employees";
 
 export const ACTIONS = {
   SET_USERS: "SET_USERS"
@@ -9,12 +8,12 @@ export type ACTION_TYPES = keyof typeof ACTIONS;
 
 export type SetUsersAction = {
   type: typeof ACTIONS.SET_USERS;
-  payload: EmployeesData;
+  payload: {};
 } & UnknownAction;
 
 export type EmployeeActions = SetUsersAction;
 
-export const setUsers = (employees: EmployeesData): SetUsersAction => ({
+export const setUsers = (employees: {}): SetUsersAction => ({
   type: ACTIONS.SET_USERS,
   payload: employees
 });

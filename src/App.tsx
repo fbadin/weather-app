@@ -10,9 +10,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { AppContext } from './contexts/appContext';
-import { Dashboard } from './pages/Dashboard';
-import { EmployeeDetails } from './pages/EmployeeDetails';
-import { CommonTemplate } from './templates/CommonTemplate';
+import { LandingPage } from './components/pages/LandingPage';
+import { CommonTemplate } from './components/templates/CommonTemplate';
 import { store } from './state/store';
 
 const App = () => {
@@ -25,8 +24,7 @@ const App = () => {
           <BrowserRouter>
             <CommonTemplate>
               <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/forecast/:cityId" element={<EmployeeDetails />} />
+                <Route path="/" element={<LandingPage />} />
                 {/* Catch-all route for undefined paths */}
                 <Route path="*" element={<Navigate to="/" />} />
               </Routes>

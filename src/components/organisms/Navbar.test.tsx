@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import * as router from 'react-router';
-import { URLS } from '../routes';
+import { URLS } from '../../routes';
 
 import { NavBar } from './NavBar';
 
@@ -9,7 +9,7 @@ jest.mock('react', () => {
   return {
     ...ActualReact,
     useContext: () => ({
-      backBtnUrl: '/dashboard/'
+      backBtnUrl: URLS.LANDING_PAGE
     }),
   }
 });
@@ -38,7 +38,7 @@ describe('NavBar component', () => {
     const logo = screen.getByAltText('Logo');
     expect(logo).toBeInTheDocument();
 
-    const backLink = screen.queryByLabelText('Back to Dashboard');
+    const backLink = screen.queryByLabelText('Back to LandingPage');
     expect(backLink).not.toBeInTheDocument();
   });
 
@@ -50,7 +50,7 @@ describe('NavBar component', () => {
       <NavBar />
     );
 
-    const backLink = screen.getByLabelText('Back to Dashboard');
+    const backLink = screen.getByLabelText('Back to LandingPage');
     expect(backLink).toBeInTheDocument();
     expect(backLink).toHaveAttribute('href', URLS.LANDING_PAGE);
 
