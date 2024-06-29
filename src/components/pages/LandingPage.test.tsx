@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 
 import { LandingPage } from './LandingPage';
 import { URLS } from '../../routes';
-import * as ACTIONS from '../../state/employees/actions';
+import * as ACTIONS from '../../state/weather/actions';
 import { store } from '../../state/store';
 import { ApiResponse } from '../../lib/api';
 import { fetchWeather } from '../../api/weather';
@@ -67,7 +67,7 @@ describe('LandingPage', () => {
   let fetchWeather: jest.Mock<Promise<ApiResponse<{}>>>;
 
   beforeEach(() => {
-    (ACTIONS.setUsers as jest.Mock).mockImplementation(()=>({ type: 'SET_USERS', payload: employeesData }))
+    (ACTIONS.setWeather as jest.Mock).mockImplementation(()=>({ type: 'SET_WEATHER', payload: employeesData }))
 
     const fetchEmployeesLib = fetchWeather as unknown as jest.Mock;
     fetchWeather = jest.fn().mockImplementation(()=>({ data: employeesData }));
@@ -81,7 +81,7 @@ describe('LandingPage', () => {
   it('renders the LandingPage component', async () => {
     await renderLandingPage();
     expect(screen.getByTestId('landing-page')).toBeInTheDocument();
-    expect(ACTIONS.setUsers).toHaveBeenCalledWith(employeesData);
+    expect(ACTIONS.setWeather).toHaveBeenCalledWith(employeesData);
   });
 
   it('sets the back button URL on mount', async () => {
@@ -112,7 +112,7 @@ describe('LandingPage', () => {
   });
 
   it('displays zero state when no employees are found', async () => {
-    (ACTIONS.setUsers as jest.Mock).mockImplementation(()=>({ type: 'SET_USERS', payload: { employees: []}}))
+    (ACTIONS.setWeather as jest.Mock).mockImplementation(()=>({ type: 'SET_WEATHER', payload: { employees: []}}))
     await renderLandingPage();
 
     await act(async () => {

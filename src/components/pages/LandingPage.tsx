@@ -8,18 +8,18 @@ import { AppContext } from '../../contexts/appContext';
 import { URLS } from '../../routes';
 
 import { RootState } from '../../state/store';
-import { setUsers } from '../../state/employees/actions';
 import { LOCATIONS, LOCATION_ID_TYPE } from '../../constants';
-import { fetchWeather } from '../../api/weather';
+import { fetchWeather, WeatherResponse } from '../../api/weather';
 import { Panel } from '../atoms/Panel';
 import { Weather } from '../molecules/Weather';
+import { setWeather } from '../../state/weather/actions';
 
 const LandingPage = () => {
   const appContext = React.useContext(AppContext);
   const [selectedLocationId, setSelectedLocationId] = React.useState <LOCATION_ID_TYPE | undefined> ();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = React.useState(false);
-  const employeesStore = useSelector((state: RootState) => state.employees);
+
   const dispatch = useDispatch();
 
   React.useEffect(()=>{
@@ -43,8 +43,9 @@ const LandingPage = () => {
         return;
       }
 
-      // const employees = response.data as {};
-      // dispatch(setUsers(employees))
+      const weather = response.data as WeatherResponse;
+      console.log('weathe response', weather)
+      dispatch(setWeather(weather))
     })();
   }, [dispatch, selectedLocationId]);
 
@@ -58,7 +59,7 @@ const LandingPage = () => {
   const departmentFilterLabel = selectedLocationId === undefined ? 'Select the city to see forecast' : (()=>{
     const location = LOCATIONS.find(l => l.id === selectedLocationId);
     return `${location?.name}, ${location?.country}`
-  })()
+  })();
 
   return (
     <div data-testid='landing-page'>
@@ -93,12 +94,7 @@ const LandingPage = () => {
         </Dropdown>
       </div>
 
-      <Weather
-        weather={'Cloud'}
-        weatherDescription={'broken clouds'}
-        temperature={23}
-        wind={'Wind 4 m/sec'}
-      />
+      <Weather />
 
       {/* {
         isLoading ? (

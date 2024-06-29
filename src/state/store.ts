@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import employeesReducer from "./employees/reducer";
+import weatherReducer from "./weather/reducer";
 
 export const store = configureStore({
   reducer: {
-    employees: employeesReducer
+    weather: weatherReducer
   }
 });
 

@@ -1,13 +1,9 @@
-export const formatDate = (date: string | undefined): string => {
-  if (!date) return '';
-  const d = new Date(date);
-
-  if (Number.isNaN(d.getTime())) {
-    return '';
-  }
-
-  const month = `0${d.getUTCMonth() + 1}`.slice(-2);
-  const day = `0${d.getUTCDate()}`.slice(-2);
-  const year = d.getUTCFullYear();
-  return `${year}-${month}-${day}`;
-};
+/**
+ * Converts a temperature from Kelvin to Celsius.
+ *
+ * @param {number} kelvin - The temperature in Kelvin.
+ * @returns {number} - The temperature in Celsius.
+ */
+export function kelvinToCelsius(kelvin: number): number {
+  return parseFloat((kelvin - 273.15).toFixed(1));
+}
