@@ -2,11 +2,3 @@
 @tailwind components;
 @tailwind utilities;
 
-/* override bootstrap utility. !important couldn`t be removed */
-.hover\:bg-primary:hover {
-  background-color: rgb(75, 30, 89) !important;
-}
-
-.hover\:border-primary:hover {
-  border-color: rgb(75, 30, 89) !important;
-}

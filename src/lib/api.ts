@@ -62,7 +62,7 @@ class Api {
     if (params?.timeout) {
       options['timeout'] = params.timeout;
     }
-    console.log('options', options)
+
     try {
       return await fetch(url, options as RequestInit);
     } catch (error) {

@@ -1,3 +1,5 @@
+import { MONTHS } from "../constants";
+
 /**
  * Converts a temperature from Kelvin to Celsius.
  *
@@ -7,3 +9,8 @@
 export function kelvinToCelsius(kelvin: number): number {
   return parseFloat((kelvin - 273.15).toFixed(1));
 }
+
+export const parseDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  return `${date.getUTCDate()} ${MONTHS[date.getMonth()]}`;
+};

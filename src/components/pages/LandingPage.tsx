@@ -1,25 +1,20 @@
 import React from 'react';
-import { Col, Dropdown, Form, InputGroup, ListGroup, Row, Spinner } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { Dropdown } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { AppContext } from '../../contexts/appContext';
 import { URLS } from '../../routes';
-
-import { RootState } from '../../state/store';
 import { LOCATIONS, LOCATION_ID_TYPE } from '../../constants';
 import { fetchWeather, WeatherResponse } from '../../api/weather';
-import { Panel } from '../atoms/Panel';
 import { Weather } from '../molecules/Weather';
 import { setWeather } from '../../state/weather/actions';
+import { Forecast } from '../organisms/Forecast';
 
 const LandingPage = () => {
   const appContext = React.useContext(AppContext);
-  const [selectedLocationId, setSelectedLocationId] = React.useState <LOCATION_ID_TYPE | undefined> ();
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = React.useState(false);
-
+  const [cityId, setCityId] = React.useState <LOCATION_ID_TYPE | undefined> ();
+  const [showForecast, setShowForecast] = React.useState <boolean> (false);
   const dispatch = useDispatch();
 
   React.useEffect(()=>{
@@ -27,16 +22,12 @@ const LandingPage = () => {
   }, [appContext]);
 
   React.useEffect(()=>{
-    if (!selectedLocationId) {
+    if (!cityId) {
       return;
     }
 
     (async () => {
-      setIsLoading(true);
-
-      const response = await fetchWeather(selectedLocationId);
-
-      setIsLoading(false);
+      const response = await fetchWeather(cityId);
 
       if (response.error_message) {
         toast.error(response.error_message);
@@ -44,20 +35,19 @@ const LandingPage = () => {
       }
 
       const weather = response.data as WeatherResponse;
-      console.log('weathe response', weather)
       dispatch(setWeather(weather))
     })();
-  }, [dispatch, selectedLocationId]);
+  }, [dispatch, cityId]);
 
   const onLocationSelect = (eventKey: any, event: any) => {
     event.preventDefault();
     event.persist();
     event.stopPropagation();
-    setSelectedLocationId(parseInt(eventKey) as LOCATION_ID_TYPE)
+    setCityId(parseInt(eventKey) as LOCATION_ID_TYPE)
   }
 
-  const departmentFilterLabel = selectedLocationId === undefined ? 'Select the city to see forecast' : (()=>{
-    const location = LOCATIONS.find(l => l.id === selectedLocationId);
+  const departmentFilterLabel = cityId === undefined ? 'Select the city to see forecast' : (()=>{
+    const location = LOCATIONS.find(l => l.id === cityId);
     return `${location?.name}, ${location?.country}`
   })();
 
@@ -82,7 +72,7 @@ const LandingPage = () => {
                   <Dropdown.Item
                     key={location.id}
                     eventKey={location.id}
-                    active={selectedLocationId === location.id}
+                    active={cityId === location.id}
                     data-testid={`cities-filter-button-${location.id}`}
                   >
                     {location.name}, {location.country}
@@ -94,68 +84,14 @@ const LandingPage = () => {
         </Dropdown>
       </div>
 
-      <Weather />
+      <Weather
+        showForecast={showForecast}
+        onShowForecastClick={() => setShowForecast(!showForecast)}
+      />
 
-      {/* {
-        isLoading ? (
-          <Panel className="mt-4">
-            <div className='w-full flex justify-center'>
-              <Spinner animation="border" variant="primary" aria-label='Loading Spinner' />
-            </div>
-          </Panel>
-        ) : (
-          <p>City selector</p>
-        )
-      } */}
-
-
-
+      {showForecast && <Forecast cityId={cityId as LOCATION_ID_TYPE} />}
     </div>
   )
 }
-
-// for the Forecast
-{/* <ListGroup className="mt-4">
-            {
-              showZeroState ? (
-                <Panel className='flex justify-center items-center gap-4'>
-                  There are no employees found
-                </Panel>
-              ) : (
-                <>
-                  <ListGroup.Item
-                      action
-                      key={'1'}
-                      variant="dark"
-                    >
-                      <Row>
-                        <Col className='font-bold'>Name</Col>
-                        <Col className='font-bold'>Position</Col>
-                        <Col className='font-bold'>Department</Col>
-                      </Row>
-                    </ListGroup.Item>
-                    {
-                      employees.map((employee) => {
-                        return (
-                          <ListGroup.Item
-                            action
-                            key={employee.id}
-                            variant="light"
-                            onClick={() => navigate(URLS.EMPLOYEE_DETAILS(employee.id))}
-                            data-testid={`employee-row-${employee.id}`}
-                          >
-                            <Row>
-                              <Col>{employee.name}</Col>
-                              <Col className='text-gray-500'>{employee.position}</Col>
-                              <Col className="text-gray-500">{employee.department}</Col>
-                            </Row>
-                          </ListGroup.Item>
-                        )
-                      })
-                    }
-                </>
-              )
-            }
-          </ListGroup> */}
 
 export { LandingPage };

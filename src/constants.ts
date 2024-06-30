@@ -18,3 +18,5 @@ export const LOCATIONS = [
 
 export type LOCATION_ID_TYPE = typeof LOCATIONS[number]['id'];
 
+export const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"] as const;
+

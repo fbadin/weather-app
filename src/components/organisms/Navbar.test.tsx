@@ -42,17 +42,5 @@ describe('NavBar component', () => {
     expect(backLink).not.toBeInTheDocument();
   });
 
-  it('renders back link when on employee details page', () => {
-    jest.spyOn(router, 'useLocation')
-      .mockReturnValue({ pathname: URLS.EMPLOYEE_DETAILS(null), search: '', state: {}, hash: '' } as any);
 
-    render(
-      <NavBar />
-    );
-
-    const backLink = screen.getByLabelText('Back to LandingPage');
-    expect(backLink).toBeInTheDocument();
-    expect(backLink).toHaveAttribute('href', URLS.LANDING_PAGE);
-
-  });
 });

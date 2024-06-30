@@ -3,7 +3,7 @@ import { Button as ReactButton } from 'react-bootstrap';
 
 type Props = {
   children: React.ReactNode;
-  variant?: 'primary' | 'danger';
+  variant?: 'primary' | 'danger' | 'secondary';
   className?: string;
   disabled?: boolean;
   dataTestId?: string;
