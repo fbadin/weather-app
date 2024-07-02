@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { Spinner, Table } from 'react-bootstrap';
+import * as Redux from 'react-redux';
 import { toast } from 'react-toastify';
 import { fetchForecast, ForecastResponse } from '../../api/forecast';
-import { LOCATION_ID_TYPE } from '../../constants';
+import { DAY_IN_MILLISECONDS, LOCATION_ID_TYPE } from '../../constants';
+import { AppContext } from '../../contexts/appContext';
 
-import { parseDate } from '../../lib/utils';
+import { formatDate, formatUnixDate, kelvinToCelsius, parseDate } from '../../lib/utils';
 import { Button } from '../atoms/Button';
 import { Panel } from '../atoms/Panel';
 import TC from '../atoms/TableCell';
@@ -13,24 +15,19 @@ interface Props {
   cityId: LOCATION_ID_TYPE
 }
 
-const Forecast = ({ cityId }: Props) => {
+const Forecast: React.FC<Props> = ({ cityId }) => {
   const [isLoading, setIsLoading] = React.useState <boolean> (false);
-  const [selectedDate, setSelectedDate] = React.useState <string> (
-    new Date()
-    .toLocaleString('en-US', {
-      timeZone: 'America/New_York', // Eastern Standard Time (EST)
-      hour12: false, // 24-hour format
-    })
-  );
+  const options = { timeZone: 'America/Toronto' };
+  const formatter = new Intl.DateTimeFormat([], options);
+  const tomorrowDate = new Date(new Date(formatter.format(new Date())).getTime() + DAY_IN_MILLISECONDS);
+  const [selectedDate, setSelectedDate] = React.useState <Date> (tomorrowDate);
+  const appContext = React.useContext(AppContext);
 
   React.useEffect(()=>{
     (async () => {
-      const date = new Date(selectedDate)
-      const forecastDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getUTCDate()}`;
-
       setIsLoading(true);
 
-      const response = await fetchForecast(cityId, forecastDate);
+      const response = await fetchForecast(cityId);
 
       setIsLoading(false);
 
@@ -39,12 +36,41 @@ const Forecast = ({ cityId }: Props) => {
         return;
       }
 
-      const weather = response.data as ForecastResponse;
-      // dispatch(setWeather(weather))
+      const forecast = response.data as ForecastResponse;
+      appContext?.setForecast(forecast);
     })();
-  }, [])
+  }, [cityId])
 
-  console.log('selectedDate', selectedDate)
+  const dateButtons = React.useMemo(() => {
+    const initialDate = new Date(tomorrowDate)
+    const initialDateTime = initialDate.getTime();
+    const selectedDateFormatted = formatDate(selectedDate);
+    const buttons = [];
+
+    for (let i = 0; i < 5; i++) {
+      const buttonDate = new Date(initialDateTime + i * DAY_IN_MILLISECONDS);
+      const buttonDateFormatted = formatDate(buttonDate);
+      const selected = selectedDateFormatted === buttonDateFormatted;
+
+      buttons.push(
+        <Button
+          key={i}
+          variant={selected ? 'primary' : 'secondary'}
+          onClick={() => setSelectedDate(buttonDate)}
+        >
+          {parseDate(buttonDate.toISOString())}
+        </Button>
+      );
+    }
+    return buttons;
+  }, [cityId, selectedDate]);
+
+
+  const selectedFormattedDate = formatDate(selectedDate);
+  const forecastList = appContext?.forecast?.list.filter((forecast)=>{
+    const forecastFormattedDate = formatDate(new Date(forecast.dt * 1000));
+    return selectedFormattedDate === forecastFormattedDate;
+  }) || [];
 
   return (
     <div data-testid='component-container' className='mt-4'>
@@ -74,19 +100,25 @@ const Forecast = ({ cityId }: Props) => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <TC type='td'>15 Sep 11AM</TC>
-                  <TC type='td'>24 °C</TC>
-                  <TC type='td'>23 °C</TC>
-                  <TC type='td'>25 °C</TC>
-                  <TC type='td'>3 m/sec</TC>
-                  <TC type='td'>light rain</TC>
-                </tr>
+                {
+                  forecastList.map((forecast)=>{
+                    return (
+                      <tr key={forecast.dt}>
+                        <TC type='td'>{formatUnixDate(forecast.dt)}</TC>
+                        <TC type='td'>{kelvinToCelsius(forecast.main.temp)} °C</TC>
+                        <TC type='td'>{kelvinToCelsius(forecast.main.temp_min)} °C</TC>
+                        <TC type='td'>{kelvinToCelsius(forecast.main.temp_max)} °C</TC>
+                        <TC type='td'>{forecast.wind.speed} m/sec</TC>
+                        <TC type='td'>{forecast.weather[0].description}</TC>
+                      </tr>
+                    )
+                  })
+                }
               </tbody>
             </Table>
 
             <div className='flex gap-2'>
-              <Button onClick={()=>null} variant='secondary'>{parseDate(selectedDate)}</Button>
+              {dateButtons}
             </div>
           </>
         )

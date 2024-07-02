@@ -12,14 +12,9 @@ import { setWeather } from '../../state/weather/actions';
 import { Forecast } from '../organisms/Forecast';
 
 const LandingPage = () => {
-  const appContext = React.useContext(AppContext);
   const [cityId, setCityId] = React.useState <LOCATION_ID_TYPE | undefined> ();
   const [showForecast, setShowForecast] = React.useState <boolean> (false);
   const dispatch = useDispatch();
-
-  React.useEffect(()=>{
-    appContext?.setBackBtnUrl(URLS.LANDING_PAGE);
-  }, [appContext]);
 
   React.useEffect(()=>{
     if (!cityId) {

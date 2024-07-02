@@ -10,6 +10,7 @@ import * as ACTIONS from '../../state/weather/actions';
 import { store } from '../../state/store';
 import { ApiResponse } from '../../lib/api';
 import { fetchWeather } from '../../api/weather';
+import { Forecast } from '../organisms/Forecast';
 
 const employeesData: {} = {
   employees: [
@@ -42,11 +43,11 @@ jest.mock('../state/employees/actions', ()=>({
 
 jest.useFakeTimers();
 
-const mockSetBackBtnUrl = jest.fn();
+const mockSetForecast = jest.fn();
 
 const mockAppContextValue = {
-  backBtnUrl: URLS.LANDING_PAGE,
-  setBackBtnUrl: mockSetBackBtnUrl,
+  forecast: undefined,
+  setForecast: mockSetForecast,
 };
 
 const renderLandingPage = async () => {
@@ -86,7 +87,7 @@ describe('LandingPage', () => {
 
   it('sets the back button URL on mount', async () => {
     await renderLandingPage();
-    expect(mockSetBackBtnUrl).toHaveBeenCalledWith(URLS.LANDING_PAGE);
+    expect(mockSetForecast).toHaveBeenCalledWith(URLS.LANDING_PAGE);
   });
 
   it('handles sorting button click', async () => {

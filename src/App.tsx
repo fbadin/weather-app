@@ -13,13 +13,14 @@ import { AppContext } from './contexts/appContext';
 import { LandingPage } from './components/pages/LandingPage';
 import { CommonTemplate } from './components/templates/CommonTemplate';
 import { store } from './state/store';
+import { ForecastResponse } from './api/forecast';
 
 const App = () => {
-  const [backBtnUrl, setBackBtnUrl] = React.useState<string>("");
+  const [forecast, setForecast] = React.useState<ForecastResponse>();
 
   return (
     <Provider store={store}>
-      <AppContext.Provider value={{ backBtnUrl, setBackBtnUrl }}>
+      <AppContext.Provider value={{ forecast, setForecast }}>
         <div data-testid='app-root' className='h-app-root'>
           <BrowserRouter>
             <CommonTemplate>

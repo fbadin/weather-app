@@ -38,14 +38,6 @@ type WeatherDescription = {
   icon: string;
 };
 
-export const fetchForecast = (cityId: number, date: string) => {
-  // Regular expression to match YYYY-MM-DD format
-  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-
-  // Check if the date matches the required format
-  if (!dateRegex.test(date)) {
-    throw new Error('Invalid date format. Expected YYYY-MM-DD.');
-  }
-
-  return api.get<ForecastResponse>(API_URLS.FORECAST(cityId, date));
+export const fetchForecast = (cityId: number) => {
+  return api.get<ForecastResponse>(API_URLS.FORECAST(cityId));
 }
