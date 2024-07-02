@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { Spinner, Table } from 'react-bootstrap';
-import * as Redux from 'react-redux';
 import { toast } from 'react-toastify';
 import { fetchForecast, ForecastResponse } from '../../api/forecast';
-import { DAY_IN_MILLISECONDS, LOCATION_ID_TYPE } from '../../constants';
+import { DAY_IN_MILLISECONDS, CITY_ID } from '../../constants';
 import { AppContext } from '../../contexts/appContext';
 
 import { formatDate, formatUnixDate, kelvinToCelsius, parseDate } from '../../lib/utils';
@@ -12,18 +11,24 @@ import { Panel } from '../atoms/Panel';
 import TC from '../atoms/TableCell';
 
 interface Props {
-  cityId: LOCATION_ID_TYPE
+  showForecast: boolean;
+  cityId: CITY_ID
 }
 
-const Forecast: React.FC<Props> = ({ cityId }) => {
+const Forecast: React.FC<Props> = ({ showForecast, cityId }) => {
   const [isLoading, setIsLoading] = React.useState <boolean> (false);
   const options = { timeZone: 'America/Toronto' };
   const formatter = new Intl.DateTimeFormat([], options);
   const tomorrowDate = new Date(new Date(formatter.format(new Date())).getTime() + DAY_IN_MILLISECONDS);
   const [selectedDate, setSelectedDate] = React.useState <Date> (tomorrowDate);
   const appContext = React.useContext(AppContext);
+  const appContextRef = React.useRef(appContext);
 
   React.useEffect(()=>{
+    if (!showForecast || !cityId) {
+      return;
+    }
+
     (async () => {
       setIsLoading(true);
 
@@ -37,11 +42,11 @@ const Forecast: React.FC<Props> = ({ cityId }) => {
       }
 
       const forecast = response.data as ForecastResponse;
-      appContext?.setForecast(forecast);
+      appContextRef.current?.setForecast(forecast);
     })();
-  }, [cityId])
+  }, [showForecast, cityId]);
 
-  const dateButtons = React.useMemo(() => {
+  const renderDateButtons = () => {
     const initialDate = new Date(tomorrowDate)
     const initialDateTime = initialDate.getTime();
     const selectedDateFormatted = formatDate(selectedDate);
@@ -63,8 +68,11 @@ const Forecast: React.FC<Props> = ({ cityId }) => {
       );
     }
     return buttons;
-  }, [cityId, selectedDate]);
+  };
 
+  if (!showForecast) {
+    return null;
+  }
 
   const selectedFormattedDate = formatDate(selectedDate);
   const forecastList = appContext?.forecast?.list.filter((forecast)=>{
@@ -118,7 +126,7 @@ const Forecast: React.FC<Props> = ({ cityId }) => {
             </Table>
 
             <div className='flex gap-2'>
-              {dateButtons}
+              {renderDateButtons()}
             </div>
           </>
         )

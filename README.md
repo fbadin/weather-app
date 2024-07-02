@@ -30,7 +30,8 @@ A project to show the weather, created using Create React App, Redux, Tailwind, 
 
 ## Install the Node.js Dependencies
 
-Ensure you have a recent version of Node.js running on your local machine, then run:
+Ensure you have a recent version of Node.js running on your local machine. Currently built with Node v20 and npm v10.
+Run:
 
 ```sh
 npm ci
@@ -43,8 +44,6 @@ npm ci
 ```sh
 cp development.env .env
 ```
-
-You can edit the API endpoint and the local PORT for testing. Note that for this sample project, both API endpoints point to a live staging server for tests.
 
 ---
 

@@ -1,6 +1,6 @@
 {
-  "short_name": "Employees App",
-  "name": "employees-app",
+  "short_name": "Wheater App",
+  "name": "wheather-app",
   "icons": [
     {
       "src": "favicon.ico",

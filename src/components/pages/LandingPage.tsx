@@ -1,18 +1,16 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 
-import { AppContext } from '../../contexts/appContext';
-import { URLS } from '../../routes';
-import { LOCATIONS, LOCATION_ID_TYPE } from '../../constants';
+import { LOCATIONS, CITY_ID } from '../../constants';
 import { fetchWeather, WeatherResponse } from '../../api/weather';
 import { Weather } from '../molecules/Weather';
 import { setWeather } from '../../state/weather/actions';
 import { Forecast } from '../organisms/Forecast';
 
 const LandingPage = () => {
-  const [cityId, setCityId] = React.useState <LOCATION_ID_TYPE | undefined> ();
+  const [cityId, setCityId] = React.useState <CITY_ID | undefined> ();
   const [showForecast, setShowForecast] = React.useState <boolean> (false);
   const dispatch = useDispatch();
 
@@ -34,17 +32,25 @@ const LandingPage = () => {
     })();
   }, [dispatch, cityId]);
 
-  const onLocationSelect = (eventKey: any, event: any) => {
+  const onLocationSelect = (eventKey: string | null, event: SyntheticEvent<unknown, Event>) => {
     event.preventDefault();
     event.persist();
     event.stopPropagation();
-    setCityId(parseInt(eventKey) as LOCATION_ID_TYPE)
+
+    if (!eventKey) {
+      setCityId(undefined);
+      return;
+    }
+    setCityId(parseInt(eventKey) as CITY_ID)
   }
 
-  const departmentFilterLabel = cityId === undefined ? 'Select the city to see forecast' : (()=>{
+  const renderCityFilterLabel = (): string => {
+    if (cityId === undefined) {
+      return 'Select the city to see forecast';
+    }
     const location = LOCATIONS.find(l => l.id === cityId);
     return `${location?.name}, ${location?.country}`
-  })();
+  }
 
   return (
     <div data-testid='landing-page'>
@@ -57,7 +63,7 @@ const LandingPage = () => {
           data-testid="cities-filter-dropdown"
         >
           <Dropdown.Toggle className='bg-dark-2 border'>
-            {departmentFilterLabel}
+            {renderCityFilterLabel()}
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
@@ -84,7 +90,10 @@ const LandingPage = () => {
         onShowForecastClick={() => setShowForecast(!showForecast)}
       />
 
-      {showForecast && <Forecast cityId={cityId as LOCATION_ID_TYPE} />}
+      <Forecast
+        showForecast={showForecast}
+        cityId={cityId as CITY_ID}
+      />
     </div>
   )
 }

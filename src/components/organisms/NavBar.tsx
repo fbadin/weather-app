@@ -1,9 +1,5 @@
-import * as React from 'react';
-import { ArrowLeft, Cloud } from 'react-bootstrap-icons';
+import { Cloud } from 'react-bootstrap-icons';
 
-import { AppContext } from '../../contexts/appContext';
-import logo from '../assets/logo192.png'
-import { useLocation } from 'react-router-dom';
 import { URLS } from '../../routes';
 import { Link } from 'react-router-dom';
 

@@ -1,4 +1,3 @@
-import * as React from 'react';
 import * as Redux from 'react-redux';
 import { kelvinToCelsius } from '../../lib/utils';
 import { RootState } from '../../state/store';
