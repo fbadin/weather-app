@@ -1,0 +1,45 @@
+{
+  "coord": {
+      "lon": -79.4163,
+      "lat": 43.7001
+  },
+  "weather": [
+      {
+          "id": 803,
+          "main": "Clouds",
+          "description": "broken clouds",
+          "icon": "04d"
+      }
+  ],
+  "base": "stations",
+  "main": {
+      "temp": 294.76,
+      "feels_like": 294.41,
+      "temp_min": 293.35,
+      "temp_max": 295.57,
+      "pressure": 1020,
+      "humidity": 55,
+      "sea_level": 1020,
+      "grnd_level": 1004
+  },
+  "visibility": 10000,
+  "wind": {
+      "speed": 3.09,
+      "deg": 80
+  },
+  "clouds": {
+      "all": 75
+  },
+  "dt": 1719960758,
+  "sys": {
+      "type": 2,
+      "id": 2095531,
+      "country": "CA",
+      "sunrise": 1719913230,
+      "sunset": 1719968568
+  },
+  "timezone": -14400,
+  "id": 6167865,
+  "name": "Toronto",
+  "cod": 200
+}

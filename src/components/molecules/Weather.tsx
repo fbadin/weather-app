@@ -34,7 +34,7 @@ const Weather = ({ showForecast, onShowForecastClick }: Props) => {
       </div>
 
       <div className='mt-4'>
-        <Button onClick={onShowForecastClick}>
+        <Button onClick={onShowForecastClick} dataTestId='see-forecast-button'>
           { showForecast ? 'CLOSE FORECAST' : 'SEE FORECAST' }
         </Button>
       </div>
