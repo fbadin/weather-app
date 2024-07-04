@@ -1,14 +1,6 @@
 import { act, render, screen } from '@testing-library/react';
 import App from './App';
 
-global.fetch = jest.fn().mockImplementation((url, options) => {
-  return Promise.resolve({
-    status: 200,
-    ok: true,
-    json: async () => ({}),
-  });
-}) as jest.Mock;
-
 describe('App', () => {
   it('renders the App without crashing', async ()=>{
     await act(async () => {
@@ -40,5 +32,10 @@ describe('App', () => {
     const LandingPage = screen.getByTestId('landing-page');
     expect(LandingPage).toBeInTheDocument();
   });
+
+  it('renders the app title', async ()=>{
+    await act(()=> render(<App />));
+    expect(screen.getByText('Weather Forecast')).toBeInTheDocument()
+  })
 })
 

@@ -1,4 +1,4 @@
-import { ForecastResponse } from "../../../api/forecast";
+import { ForecastResponse } from "../../api/forecast";
 
 export const mockForecastResponse: ForecastResponse = {
   "cod": "200",

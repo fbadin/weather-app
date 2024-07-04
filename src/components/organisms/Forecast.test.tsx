@@ -6,7 +6,7 @@ import { AppContext } from '../../contexts/appContext';
 import { Forecast } from './Forecast';
 import { ForecastResponse } from '../../api/forecast';
 import { LOCATIONS } from '../../constants';
-import { mockForecastResponse } from './fixtures/forecastResponse';
+import { mockForecastResponse } from '../../tests/fixtures/forecastResponse';
 const cityId = LOCATIONS[0].id;
 
 jest.mock('react-toastify', () => ({
@@ -49,6 +49,15 @@ const renderWeather = (error_message: string | undefined) => {
 
 describe('Forecast Component', () => {
 
+  const originalDate = new Date();
+
+  beforeEach(() => {
+    jest.setSystemTime(new Date(2024, 6, 3).getTime()); // Set the date to July 3, 2024
+  });
+
+  afterEach(() => {
+    jest.setSystemTime(originalDate); // Restore the original date
+  });
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -74,12 +83,12 @@ describe('Forecast Component', () => {
   it('displays forecast data when available', async () => {
     renderWeather(undefined);
 
-    await waitFor(() => expect(mockedFetchForecast).toHaveBeenCalledTimes(1));
-
-    await waitFor(() => expect(screen.getByText('4 Jul 12AM')).toBeInTheDocument());
-    await waitFor(() => expect(screen.getByText('3.84 m/sec')).toBeInTheDocument());
-    await waitFor(() => expect(screen.getByText('light rain')).toBeInTheDocument());
-
+    await waitFor(() => {
+      expect(mockedFetchForecast).toHaveBeenCalledTimes(1);
+      expect(screen.getByText('4 Jul 12AM')).toBeInTheDocument();
+      expect(screen.getByText('3.84 m/sec')).toBeInTheDocument();
+      expect(screen.getByText('light rain')).toBeInTheDocument()
+    });
   });
 
   it('renders date buttons and handles click', async () => {
