@@ -1,46 +1,59 @@
 import { render, screen } from '@testing-library/react';
-import * as router from 'react-router';
-import { URLS } from '../../routes';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import { NavBar } from './NavBar';
+import { URLS } from '../../routes';
 
-jest.mock('react', () => {
-  const ActualReact = jest.requireActual('react')
-  return {
-    ...ActualReact,
-    useContext: () => ({
-      backBtnUrl: URLS.LANDING_PAGE
-    }),
-  }
-});
-
-describe('NavBar component', () => {
-  it('render nav classes', ()=>{
-    jest.spyOn(router, 'useLocation')
-      .mockReturnValue({ pathname: URLS.LANDING_PAGE, search: '', state: {}, hash: '' } as any);
-
+describe('NavBar Component', () => {
+  it('should render the navbar', () => {
     render(
-      <NavBar />
+      <Router>
+        <NavBar />
+      </Router>
     );
-
-    const nav = screen.getByTestId('nav');
-    expect(nav).toHaveClass('absolute top-0 left-0 w-full min-w-full h-16 px-4 py-2 flex gap-4 justify-between items-center bg-dark-1')
+    const navbarElement = screen.getByTestId('navbar');
+    expect(navbarElement).toBeVisible();
   });
 
-  it('renders logo without back link', () => {
-    jest.spyOn(router, 'useLocation')
-      .mockReturnValue({ pathname: URLS.LANDING_PAGE, search: '', state: {}, hash: '' } as any);
-
+  it('should render the nav element', () => {
     render(
-      <NavBar />
+      <Router>
+        <NavBar />
+      </Router>
     );
-
-    const logo = screen.getByAltText('Logo');
-    expect(logo).toBeInTheDocument();
-
-    const backLink = screen.queryByLabelText('Back to LandingPage');
-    expect(backLink).not.toBeInTheDocument();
+    const navElement = screen.getByTestId('nav');
+    expect(navElement).toBeVisible();
   });
 
+  it('should have a link to the landing page', () => {
+    render(
+      <Router>
+        <NavBar />
+      </Router>
+    );
+    const linkElement = screen.getByRole('link', { name: /back to home/i });
+    expect(linkElement).toHaveAttribute('href', URLS.LANDING_PAGE);
+  });
 
+  it('should have a Cloud icon with correct attributes', () => {
+    render(
+      <Router>
+        <NavBar />
+      </Router>
+    );
+    const iconElement = screen.getByTestId('nav').querySelector('svg');
+    expect(iconElement).toHaveClass('text-blue-500');
+    expect(iconElement).toHaveAttribute('height', '48');
+    expect(iconElement).toHaveAttribute('width', '48');
+  });
+
+  it('should navigate to the landing page when the Cloud icon is clicked', () => {
+    render(
+      <Router>
+        <NavBar />
+      </Router>
+    );
+    const linkElement = screen.getByRole('link', { name: /back to home/i });
+    expect(linkElement).toHaveAttribute('href', URLS.LANDING_PAGE);
+  });
 });

@@ -7,6 +7,9 @@ describe('Landing Page', () => {
   let cityId: CITY_ID;
 
   beforeEach(()=>{
+    const now = new Date(2024, 6, 2, 11, 0, 0); // Note: Month is 0-indexed, so 6 represents July
+    cy.clock(now.getTime());
+
     const baseUrl = Cypress.config('baseUrl');
     cy.visit(baseUrl as string);
     cityId = LOCATIONS[0].id;
@@ -72,7 +75,7 @@ describe('Landing Page', () => {
     });
   });
 
-  it.only('renders the forecast when "SEE FORECAST" button is clicked', () => {
+  it('renders the forecast when "SEE FORECAST" button is clicked', () => {
     cy.fixture('weather.json').then((weatherData) => {
       cy.intercept('GET', API_URLS.WEATHER(cityId), {
         statusCode: 200,
@@ -97,9 +100,7 @@ describe('Landing Page', () => {
         cy.get('td').should('contain', '20 °C');
         cy.get('td').should('contain', '3.32 m/sec');
         cy.get('td').should('contain', 'broken clouds');
-
       })
-
     });
   });
 })

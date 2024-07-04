@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { CommonTemplate } from './CommonTemplate';
 
 // Mock the NavBar component
-jest.mock('../components/NavBar', () => ({
+jest.mock('../organisms/NavBar', () => ({
   NavBar: () => <div data-testid="navbar">NavBar</div>,
 }));
 

@@ -23,9 +23,7 @@ describe('api', () => {
 
     expect(mockedFetch).toHaveBeenCalledWith(url, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      redirect: 'follow',
     });
     expect(response.data).toBe(data);
   });
@@ -92,9 +90,7 @@ describe('api', () => {
 
     expect(mockedFetch).toHaveBeenCalledWith(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      redirect: 'follow',
       body: JSON.stringify(backendData)
     });
     expect(response.data).toBe(data);
@@ -119,9 +115,7 @@ describe('api', () => {
 
     expect(mockedFetch).toHaveBeenCalledWith(url, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      redirect: 'follow',
       body: JSON.stringify(backendData)
     });
     expect(response.data).toBe(data);
@@ -151,9 +145,7 @@ describe('api', () => {
 
     expect(mockedFetch).toHaveBeenCalledWith(url, {
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      redirect: 'follow',
       body: JSON.stringify(backendData)
     });
     expect(response.data).toBe(data);
