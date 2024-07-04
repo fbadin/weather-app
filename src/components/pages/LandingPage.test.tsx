@@ -1,10 +1,8 @@
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useDispatch, useSelector } from 'react-redux';
 import {  Dispatch, UnknownAction } from 'redux';
 
-// import { toast } from 'react-toastify';
-import { fetchWeather, WeatherResponse } from '../../api/weather';
+import { fetchWeather } from '../../api/weather';
 import { CITY_ID, LOCATIONS } from '../../constants';
 import { setWeather } from '../../state/weather/actions';
 import { mockWeatherResponse } from '../../tests/fixtures/weatherResponse';

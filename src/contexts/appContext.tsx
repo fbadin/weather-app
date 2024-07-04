@@ -6,6 +6,17 @@ type Context = {
 	setForecast: (forecast: ForecastResponse) => void;
 }
 
-const AppContext = React.createContext<undefined | Context>(undefined);
+export const AppContext = React.createContext<undefined | Context>(undefined);
+interface Props {
+	children: React.ReactNode;
+}
 
-export { AppContext };
+export const AppContextProvider: React.FC<Props> = ({ children }) => {
+	const [forecast, setForecast] = React.useState<ForecastResponse>();
+
+	return (
+		<AppContext.Provider value={{ forecast, setForecast }}>
+			{children}
+		</AppContext.Provider>
+	)
+}

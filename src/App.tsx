@@ -9,18 +9,15 @@ import {
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { AppContext } from './contexts/appContext';
+import { AppContextProvider } from './contexts/appContext';
 import { LandingPage } from './components/pages/LandingPage';
 import { CommonTemplate } from './components/templates/CommonTemplate';
 import { store } from './state/store';
-import { ForecastResponse } from './api/forecast';
 
 const App = () => {
-  const [forecast, setForecast] = React.useState<ForecastResponse>();
-
   return (
     <Provider store={store}>
-      <AppContext.Provider value={{ forecast, setForecast }}>
+      <AppContextProvider>
         <div data-testid='app-root' className='h-app-root'>
           <BrowserRouter>
             <CommonTemplate>
@@ -33,7 +30,7 @@ const App = () => {
           </BrowserRouter>
         </div>
         <ToastContainer />
-      </AppContext.Provider>
+      </AppContextProvider>
     </Provider>
   );
 }

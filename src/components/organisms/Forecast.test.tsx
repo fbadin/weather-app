@@ -2,7 +2,7 @@ import * as React from 'react'
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { toast } from 'react-toastify';
 import { fetchForecast } from '../../api/forecast';
-import { AppContext } from '../../contexts/appContext';
+import { AppContext, AppContextProvider } from '../../contexts/appContext';
 import { Forecast } from './Forecast';
 import { ForecastResponse } from '../../api/forecast';
 import { LOCATIONS } from '../../constants';
@@ -41,9 +41,9 @@ const renderWeather = (error_message: string | undefined) => {
   });
 
   render(
-    <AppContext.Provider value={mockAppContext}>
+    <AppContextProvider>
       <Forecast showForecast={true} cityId={cityId} />
-    </AppContext.Provider>
+    </AppContextProvider>
   );
 }
 
@@ -91,7 +91,7 @@ describe('Forecast Component', () => {
     });
   });
 
-  it('renders date buttons and handles click', async () => {
+  it('renders date buttons and filters the weather for the specific date', async () => {
     renderWeather(undefined);
 
     await waitFor(() => expect(fetchForecast).toHaveBeenCalledTimes(1));
@@ -99,10 +99,16 @@ describe('Forecast Component', () => {
     await waitFor(()=>{
       const buttons = screen.getAllByRole('button');
       expect(buttons).toHaveLength(5);
-      fireEvent.click(buttons[1]);
+
+      const nextDayButton = screen.getByText('5 JUL');
+      fireEvent.click(nextDayButton);
     })
 
-    await waitFor(() => expect(mockAppContext.setForecast).toHaveBeenCalledTimes(1)); // only on first render
+    await waitFor(() => {
+      expect(screen.getByText('5 Jul 12AM')).toBeInTheDocument();
+      expect(screen.getByText('3.52 m/sec')).toBeInTheDocument();
+      expect(screen.getAllByText('overcast clouds')).toHaveLength(5);
+    });
   });
 
   it('handles API error gracefully', async () => {
