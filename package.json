@@ -7,7 +7,7 @@
     "build": "echo 'NOT AVAILABLE'",
     "eject": "react-scripts eject",
     "prepare": "husky",
-    "test": "npm run cypress:test",
+    "test": "npm run jest && npm run cypress:test",
     "jest": "react-scripts test --watchAll=false",
     "cypress:test": "npx cypress run",
     "cypress:open": "npx cypress open"
